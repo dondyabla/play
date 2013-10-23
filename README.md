@@ -1,7 +1,7 @@
 # Play
 
 Play back plain text data over a TCP server, for example recorded stock data.
-This is especially useful for developing financial applications.
+This is especially useful for developing or benchmarking financial applications.
 
 ## Installation
 

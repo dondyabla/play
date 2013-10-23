@@ -27,8 +27,7 @@ AC_PREREQ(2.61)
 AC_INIT(play, 0.1)
 AM_INIT_AUTOMAKE([subdir-objects foreign])
 
-AC_PROG_CC([clang])
-AC_PROG_CXX([clang++])
+AC_PROG_CC
 AC_PROG_CPP
 
 AC_CONFIG_SRCDIR([src/main.c])
