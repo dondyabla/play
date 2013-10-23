@@ -197,6 +197,15 @@ main(int argc, char *argv[]) {
             if (config.rate)
               usleep(1000000 / config.rate);
           }
+
+          /* Ensure linefeed at end of file */
+          if (!error && line[strlen(line) - 1] != 10) {
+            char feed = 10;
+            if (write(conn, &feed, 1) == -1)
+              error = 1;
+          }
+
+          /* Close file and terminate in case of error */
           fclose(file);
           if (error)
             break;
