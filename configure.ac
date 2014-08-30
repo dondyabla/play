@@ -30,7 +30,7 @@ AM_INIT_AUTOMAKE([subdir-objects foreign])
 AC_PROG_CC
 AC_PROG_CPP
 
-AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_SRCDIR([src/play.c])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 

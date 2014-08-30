@@ -79,9 +79,9 @@ parse(int argc, char *argv[]) {
 
   /* Specify available options */
   struct option options[] = {
-    { "help",      no_argument,       0, 'h' },
-    { "loop",      no_argument,       0, 'l' },
-    { "rate",      required_argument, 0, 'r' }
+    { "help", no_argument,       0, 'h' },
+    { "loop", no_argument,       0, 'l' },
+    { "rate", required_argument, 0, 'r' }
   };
 
   /* Iterate and parse options */

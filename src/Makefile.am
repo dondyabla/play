@@ -26,7 +26,7 @@ bin_PROGRAMS = play
 
 # Build playback helper
 play_SOURCES = \
-	main.c
+	play.c
 play_CPPFLAGS = \
 	@OPTIMIZATIONS@
 
