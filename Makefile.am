@@ -18,29 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
+# -----------------------------------------------------------------------------
+# Subdirectories
+# -----------------------------------------------------------------------------
+
 SUBDIRS = src
 
 # -----------------------------------------------------------------------------
 # Custom build rules
 # -----------------------------------------------------------------------------
 
-# Shortcut for a clean rebuild
-fresh: clean all
-
 # Purge development files
 purge: clean
+	find . -depth -name '.deps*' -exec rm -rf '{}' \;
+	find . -depth -name '.libs*' -exec rm -rf '{}' \;
 	find . -name 'Makefile' -type f -delete
 	find . -name 'Makefile.in' -type f -delete
 	find . -name '.dirstamp' -type f -delete
 	find . -name '.DS_Store' -type f -delete
-	find . -depth -name '.libs*' -exec rm -rf '{}' \;
-	find . -depth -name '.deps*' -exec rm -rf '{}' \;
-	find . -depth -name '*.la' -exec rm -rf '{}' \;
-	find . -depth -name '*.lo' -exec rm -rf '{}' \;
-	find . -depth -name '*.o' -exec rm -rf '{}' \;
 	rm -f  aclocal.m4
 	rm -rf autom4te.cache
 	rm -f  autoscan.log
+	rm -f  compile
 	rm -f  configure
 	rm -f  configure.scan
 	rm -f  config.*

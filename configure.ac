@@ -24,13 +24,16 @@
 
 AC_PREREQ(2.61)
 
-AC_INIT(play, 0.1)
+AC_INIT(play, 1.0)
 AM_INIT_AUTOMAKE([subdir-objects foreign])
+
+: ${CFLAGS=""}
+: ${CXXFLAGS=""}
 
 AC_PROG_CC
 AC_PROG_CPP
 
-AC_CONFIG_SRCDIR([src/play.c])
+AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -87,11 +90,11 @@ AC_CONFIG_FILES([ \
 	src/Makefile])
 
 # -----------------------------------------------------------------------------
-# Compiler and linker flags
+# Configuration
 # -----------------------------------------------------------------------------
 
 # Compiler and linker flags
-CFLAGS="-std=c99"
-CPPFLAGS="-g -Wall"
+CFLAGS+=" -std=c99 -D_GNU_SOURCE"
+CPPFLAGS+=" -g -Wall -march=native"
 
 AC_OUTPUT
