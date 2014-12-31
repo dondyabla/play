@@ -1,4 +1,4 @@
-# Play
+# play
 
 Play back plain text data over a TCP server, for example recorded stock data.
 This is especially useful for developing or benchmarking financial applications.
@@ -19,7 +19,7 @@ Usage: play [options] port [file ...]
 Options:
   -h, --help                 print this message and exit
   -l, --loop                 play an infinite loop
-  -r, --rate                 playback rate (default: 100)
+  -r, --rate                 limit playback rate
 ```
 
 For testing purposes you can use `netcat`:
@@ -28,7 +28,7 @@ For testing purposes you can use `netcat`:
 
 ## License
 
-Copyright (c) 2013 Martin Donath, voola GmbH
+Copyright (c) 2013-2014 Martin Donath, voola GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
