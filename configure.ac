@@ -45,12 +45,17 @@ AC_PROG_INSTALL
 # Arguments
 # -----------------------------------------------------------------------------
 
-# Disable optimizations while developing
-AC_ARG_ENABLE([optimizations],
-	[AS_HELP_STRING([--disable-optimizations],
+# Disable optimized compilation
+AC_ARG_ENABLE([optimized],
+	[AS_HELP_STRING([--disable-optimized],
 		[no optimizations @<:@default=enabled@:>@])],
-	[OPTIMIZATIONS=""],
-	[OPTIMIZATIONS="-O3 -DNDEBUG"])
+	[OPTIMIZATIONS="-g"],
+	[OPTIMIZATIONS="-O3 -DNDEBUG" \
+	 OPTIMIZATIONS+=" -fno-exceptions" \
+	 OPTIMIZATIONS+=" -fno-unwind-tables" \
+	 OPTIMIZATIONS+=" -fno-asynchronous-unwind-tables" \
+	 OPTIMIZATIONS+=" -fno-stack-protector" \
+	 OPTIMIZATIONS+=" -fomit-frame-pointer"])
 AC_SUBST([OPTIMIZATIONS])
 
 # -----------------------------------------------------------------------------

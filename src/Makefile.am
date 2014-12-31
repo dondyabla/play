@@ -18,17 +18,20 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-bin_PROGRAMS = play
-
 # -----------------------------------------------------------------------------
 # Executable: Application
 # -----------------------------------------------------------------------------
 
-# Build playback helper
+# Build play executable
+bin_PROGRAMS = play
 play_SOURCES = \
 	play.c
 play_CPPFLAGS = \
 	@OPTIMIZATIONS@
+
+# -----------------------------------------------------------------------------
+# Additional configuration
+# -----------------------------------------------------------------------------
 
 # Put source directory into path
 INCLUDES = \

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Martin Donath, voola GmbH <martin.donath@voola.de>
+ * Copyright (c) 2013-2014 Martin Donath, voola GmbH <martin.donath@voola.de>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -23,11 +23,15 @@
 #include <errno.h>
 #include <getopt.h>
 #include <netinet/in.h>
+#include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
 
 /* ----------------------------------------------------------------------------
  * Definitions
@@ -35,17 +39,17 @@
 
 static struct config {
   struct {
-    char **file;                       /* Input files */
-    size_t size;                       /* Input file count */
+    char **file;                       /*!< Input files */
+    size_t size;                       /*!< Input file count */
   } input;
   struct {
-    int32_t sock;                      /* Server socket handle */
-    int32_t port;                      /* Server listen port */
+    int32_t sock;                      /*!< Server socket handle */
+    int32_t port;                      /*!< Server listen port */
   } server;
-  uint8_t loop;                        /* Play an infinite loop */
-  size_t rate;                         /* Playback rate (default: 100) */
+  uint8_t loop;                        /*!< Play an infinite loop */
+  size_t rate;                         /*!< Playback rate (default: 100) */
 } config = {
-  .rate = 100
+  .rate = 0
 };
 
 /* ----------------------------------------------------------------------------
@@ -63,7 +67,7 @@ usage() {
     "Options:\n"
     "  -h, --help                 print this message and exit\n"
     "  -l, --loop                 play an infinite loop\n"
-    "  -r, --rate                 playback rate (default: 100)\n");
+    "  -r, --rate                 limit playback rate\n");
   exit(EXIT_FAILURE);
 }
 
@@ -139,6 +143,7 @@ parse(int argc, char *argv[]) {
  */
 int
 main(int argc, char *argv[]) {
+  signal(SIGPIPE, SIG_IGN);
   parse(argc, argv);
 
   /* Create a new TCP socket */
@@ -149,7 +154,7 @@ main(int argc, char *argv[]) {
 
   /* Set socket options and initialize address struct */
   setsockopt(config.server.sock, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
-  setsockopt(config.server.sock, SOL_SOCKET, SO_NOSIGPIPE, &flag, sizeof(flag));
+  setsockopt(config.server.sock, SOL_SOCKET, 0, &flag, sizeof(flag));
 
   /* Set address family, port and bind address */
   struct sockaddr_in addr = {
@@ -179,6 +184,10 @@ main(int argc, char *argv[]) {
     if (pid == 0) {
       close(config.server.sock);
 
+      /* Rate limiting */
+      size_t sent = 0;
+      time_t from = time(NULL);
+
       /* Iterate input files */
       uint8_t error = 0;
       do {
@@ -194,8 +203,11 @@ main(int argc, char *argv[]) {
           while (!error && fgets(line, sizeof(line), file)) {
             if (write(conn, line, strlen(line)) == -1)
               error = 1;
-            if (config.rate)
-              usleep(1000000 / config.rate);
+            if (config.rate && !(++sent % config.rate)) {
+              while (from == time(NULL))
+                usleep(1);
+              from = time(NULL);
+            }
           }
 
           /* Ensure linefeed at end of file */
